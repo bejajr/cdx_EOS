@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
+    "vercel-build": "node --check server.js && node --check public/app.js",
     "smoke": "node scripts/smoke-test.mjs"
   }
 }
