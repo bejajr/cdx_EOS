@@ -1,0 +1,20 @@
+.env
+.env.local
+.env.*.local
+work-wiki-data/
+node_modules/
+.DS_Store
+*.sqlite
+*.sqlite-*
+*.db
+*.log
+*.zip
+.next/
+dist/
+coverage/
+
+# Local/generated workspace data
+docs/eos/workspaces/
+docs/source-knowledge/
+_bmad/config.user.toml
+_bmad/custom/config.user.toml

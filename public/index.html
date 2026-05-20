@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EOS Workspace</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div id="appShell" class="app">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-lockup">
+            <span>
+              <h1>EOS</h1>
+            </span>
+          </div>
+          <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Collapse sidebar" aria-expanded="true">
+            <span aria-hidden="true">‹</span>
+          </button>
+        </div>
+        <button id="jimmyHomeButton" type="button"><span class="nav-icon" aria-hidden="true">✎</span><span class="nav-label">New chat</span></button>
+        <button class="sidebar-action" type="button"><span class="nav-icon" aria-hidden="true">⌕</span><span class="nav-label">Search chats</span></button>
+        <button class="sidebar-action" type="button"><span class="nav-icon" aria-hidden="true">▣</span><span class="nav-label">Projects</span></button>
+        <button id="dashboardSideButton" class="sidebar-action" type="button"><span class="nav-icon" aria-hidden="true">◎</span><span class="nav-label">Dashboard</span></button>
+        <button id="wikiSideButton" class="sidebar-action" type="button"><span class="nav-icon" aria-hidden="true">◇</span><span class="nav-label">Knowledge</span></button>
+        <button id="tasksButton" class="sidebar-action" type="button"><span class="nav-icon" aria-hidden="true">…</span><span class="nav-label">Tasks</span></button>
+        <div class="section-title">Recents</div>
+        <div id="jobList" class="job-list"></div>
+        <div class="sidebar-footer">
+          <div id="settingsPopover" class="settings-popover hidden" role="dialog" aria-label="Settings">
+            <div class="settings-popover-header">
+              <h2 id="settingsPopoverTitle">Settings</h2>
+              <button id="closeSettingsPopover" type="button" aria-label="Close settings">×</button>
+            </div>
+            <div id="profilePopoverHeader" class="profile-popover-header hidden">
+              <span class="avatar popover-avatar" data-user-avatar data-user-initial>J</span>
+              <span>
+                <strong data-user-name>Jake</strong>
+                <small>Profile</small>
+              </span>
+            </div>
+            <div class="settings-popover-tabs">
+              <button id="settingsPageButton" class="settings-popover-tab active" type="button">Settings</button>
+            </div>
+            <div class="settings-popover-body"></div>
+          </div>
+          <button id="profileButton" class="profile-button" type="button">
+            <span class="avatar" data-user-avatar data-user-initial>J</span>
+            <span>
+              <strong data-user-name>Jake</strong>
+              <small>Profile</small>
+            </span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="topbar">
+          <div class="top-tabs" aria-label="Primary views">
+            <button id="chatTab" class="tab active" type="button" data-view="jimmy">Chat</button>
+            <button id="dashboardTab" class="tab" type="button" data-view="dashboard">Dashboard</button>
+            <button id="wikiTab" class="tab" type="button" data-view="wiki">Knowledge</button>
+          </div>
+        </section>
+
+        <section id="workspaceContextBar" class="workspace-context-bar" aria-label="Current EOS workspace context">
+          <div>
+            <span id="contextMode" class="context-pill">Workspace</span>
+            <strong id="contextWorkspaceName">EOS Personal Workspace</strong>
+            <small id="contextScopeText">Personal · Private</small>
+          </div>
+          <div class="context-access">
+            <span id="contextAccessText">EOS can access approved sources in this scope.</span>
+            <span id="contextCountsText">Loading context...</span>
+          </div>
+        </section>
+
+        <section id="jimmyView" class="view">
+          <div class="jimmy-panel">
+            <div class="welcome-panel" id="welcomePanel">
+              <h2 id="pageTitle">What’s on your mind today?</h2>
+            </div>
+            <div id="jimmyMessages" class="jimmy-messages"></div>
+            <section id="activityPanel" class="activity-panel hidden" aria-label="Agent activity"></section>
+            <form id="jimmyForm" class="jimmy-form">
+              <button id="importDocButton" class="add-button" type="button" title="Upload source knowledge">+</button>
+              <textarea id="jimmyInput" rows="1" placeholder="Ask anything"></textarea>
+              <div id="commandSuggestions" class="command-suggestions hidden" role="listbox" aria-label="Suggested EOS commands"></div>
+              <input id="sourceFileInput" class="hidden" type="file" multiple accept=".txt,.md,.csv,.json,.html,.htm,.log,.pdf,.docx,.xlsx">
+              <div class="composer-actions">
+                <span></span>
+                <button class="model-button" type="button">Instant</button>
+                <button class="primary" type="submit">Send</button>
+              </div>
+            </form>
+            <div class="command-row">
+              <button class="command-chip" data-command="/capture">Capture notes</button>
+              <button class="command-chip" data-command="Draft or edit a document">Write or edit</button>
+              <button class="command-chip" data-command="Look something up in my knowledge">Look something up</button>
+            </div>
+            <div id="reminderList" class="hidden"></div>
+          </div>
+        </section>
+
+        <section id="dashboardView" class="view hidden">
+          <div class="dashboard-page">
+            <header class="dashboard-hero">
+              <div>
+                <h2 id="dashboardGreeting">Daily overview</h2>
+                <div class="dashboard-meta">
+                  <span id="dashboardDate">Wednesday, May 13th</span>
+                  <span id="weatherLocation">Raleigh, NC</span>
+                  <strong id="weatherTemp">--°</strong>
+                  <span id="weatherStatus">Loading weather</span>
+                </div>
+              </div>
+            </header>
+
+            <section class="dashboard-snapshot" aria-label="Daily snapshot">
+              <div class="dashboard-focus">
+                <span>Today’s focus</span>
+                <strong id="dashboardFocusText">Loading priorities...</strong>
+              </div>
+              <div class="dashboard-strip" aria-label="Daily counts">
+                <div class="dashboard-metric">
+                  <strong id="todayCount">0</strong>
+                  <span>Due today</span>
+                </div>
+                <div class="dashboard-metric danger">
+                  <strong id="overdueCount">0</strong>
+                  <span>Overdue</span>
+                </div>
+                <div class="dashboard-metric">
+                  <strong id="waitingCount">0</strong>
+                  <span>Waiting</span>
+                </div>
+                <div class="dashboard-metric">
+                  <strong id="draftCount">0</strong>
+                  <span>Drafts</span>
+                </div>
+                <div class="dashboard-metric">
+                  <strong id="knowledgeCount">0</strong>
+                  <span>Sources</span>
+                </div>
+              </div>
+            </section>
+
+            <nav class="dashboard-actions" aria-label="Dashboard shortcuts">
+              <button type="button" data-dashboard-action="chat">Ask EOS</button>
+              <button type="button" data-dashboard-action="tasks">Open Tasks</button>
+              <button type="button" data-dashboard-action="wiki">Open Knowledge</button>
+            </nav>
+
+            <div class="dashboard-board">
+              <section class="dashboard-panel dashboard-panel-main">
+                <div class="card-header">
+                  <h3>Priority queue</h3>
+                  <span id="dashboardPriorityCount">0</span>
+                </div>
+                <div id="dashboardPriorityList" class="dashboard-list"></div>
+              </section>
+
+              <section class="dashboard-panel">
+                <div class="card-header">
+                  <h3>Follow up</h3>
+                  <span id="waitingPanelCount">0</span>
+                </div>
+                <div id="dashboardFollowupList" class="dashboard-list"></div>
+              </section>
+
+              <section class="dashboard-panel">
+                <div class="card-header">
+                  <h3>Knowledge updates</h3>
+                  <span id="safetyWatchCount">0</span>
+                </div>
+                <div id="dashboardKnowledgeList" class="dashboard-list"></div>
+              </section>
+
+              <section class="dashboard-panel dashboard-panel-compact">
+                <div class="card-header">
+                  <h3>Resume</h3>
+                </div>
+                <div id="pickupList" class="dashboard-list"></div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="tasksView" class="view hidden">
+          <div class="tasks-page">
+            <header class="tasks-header">
+              <h2>Tasks</h2>
+              <button id="addTaskButton" class="small-action" type="button">Add task</button>
+            </header>
+
+            <section class="task-section">
+              <button id="todoToggle" class="task-section-toggle" type="button" aria-expanded="true">
+                <span><span class="section-arrow" aria-hidden="true">▾</span> To Do:</span>
+                <strong id="todoCount">0</strong>
+              </button>
+              <div id="todoTasks" class="task-section-body"></div>
+            </section>
+
+            <section class="task-section">
+              <button id="completedToggle" class="task-section-toggle" type="button" aria-expanded="true">
+                <span><span class="section-arrow" aria-hidden="true">▾</span> Completed:</span>
+                <strong id="completedCount">0</strong>
+              </button>
+              <div id="completedTasks" class="task-section-body"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="wikiView" class="view hidden">
+          <div class="wiki-page">
+            <header class="wiki-header">
+              <div>
+                <h2>Knowledge</h2>
+                <p>Markdown operational files, source documents, and project continuity.</p>
+              </div>
+              <div class="wiki-header-actions">
+                <button id="newWikiButton" class="small-action" type="button">New page</button>
+                <button id="refreshWikiButton" class="small-action" type="button">Refresh</button>
+              </div>
+            </header>
+            <div class="wiki-layout">
+              <aside class="wiki-index">
+                <div id="wikiList" class="wiki-list"></div>
+              </aside>
+              <article class="wiki-reader">
+                <div class="wiki-editor-header">
+                  <input id="wikiTitleInput" type="text" placeholder="Knowledge page title">
+                  <button id="saveWikiButton" class="small-action" type="button">Save page</button>
+                </div>
+                <textarea id="wikiEditor" class="wiki-editor" spellcheck="true" placeholder="# New wiki&#10;&#10;Start writing..."></textarea>
+                <small id="wikiSaveStatus" class="settings-save-status"></small>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <div id="taskModal" class="modal-backdrop hidden" role="dialog" aria-label="Add task">
+          <form id="addTaskForm" class="task-modal">
+            <div class="modal-header">
+              <h3 id="taskModalTitle">Add task</h3>
+              <button id="cancelAddTaskButton" type="button" aria-label="Close add task">×</button>
+            </div>
+            <label>Task<input id="newTaskTitle" type="text" placeholder="What needs to be done?" required></label>
+            <label>Due date and time<input id="newTaskDueAt" type="datetime-local"></label>
+            <div class="modal-actions">
+              <button type="button" id="secondaryCancelAddTaskButton">Cancel</button>
+              <button id="taskModalSubmitButton" class="primary" type="submit">Add task</button>
+            </div>
+          </form>
+        </div>
+
+        <section id="intakeView" class="view hidden">
+          <form id="intakeForm" class="panel form-grid">
+            <label>Title<input name="title" required placeholder="Document onboarding process"></label>
+            <label>Requester<input name="requesterName" placeholder="Client or coworker name"></label>
+            <label>Requester type
+              <select name="requesterType">
+                <option value="coworker">Coworker</option>
+                <option value="client">Client</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label>Organization/team<input name="organization" placeholder="Team or company"></label>
+            <label>Priority
+              <select name="priority">
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+            <label>Due date<input name="dueAt" type="datetime-local"></label>
+            <label class="wide">Summary<textarea name="summary" rows="3" placeholder="What do they need?"></textarea></label>
+            <label class="wide">Desired outcome<textarea name="desiredOutcome" rows="2" placeholder="What does done look like?"></textarea></label>
+            <label class="wide">Raw request<textarea name="rawRequest" rows="4" placeholder="Paste the message or context here"></textarea></label>
+            <label class="wide">Next action<input name="nextAction" placeholder="Clarify access, draft document, schedule follow-up..."></label>
+            <label>Reminder title<input name="reminderTitle" placeholder="Follow up"></label>
+            <label>Reminder date<input name="reminderAt" type="datetime-local"></label>
+            <label class="wide">Constraints<textarea name="constraints" rows="2" placeholder="Known constraints or risks"></textarea></label>
+            <div class="actions wide">
+              <button type="button" id="cancelIntakeButton">Cancel</button>
+              <button class="primary" type="submit">Create work file</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="jobView" class="view hidden">
+          <div class="job-layout">
+            <div class="panel wiki-list">
+              <h3>Knowledge files</h3>
+              <div id="fileList" class="stack"></div>
+              <h3>Tasks</h3>
+              <div id="taskList" class="stack"></div>
+              <h3>Reminders</h3>
+              <div id="jobReminderList" class="stack"></div>
+            </div>
+
+            <div class="panel editor-panel">
+              <div class="editor-header">
+                <h3 id="activeFileName">Select a file</h3>
+                <div class="editor-actions">
+                  <button id="askJimmyButton">Ask EOS</button>
+                  <button id="saveFileButton">Save</button>
+                </div>
+              </div>
+              <textarea id="markdownEditor" class="editor" spellcheck="true"></textarea>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div id="settingsPage" class="settings-page hidden" role="dialog" aria-label="Settings" aria-modal="true">
+      <header class="settings-page-topbar">
+        <button id="closeSettingsPage" class="settings-back-button" type="button" aria-label="Close settings">‹</button>
+        <h2>Settings</h2>
+        <span class="settings-beta">Beta</span>
+      </header>
+      <div class="settings-page-layout">
+        <aside class="settings-page-sidebar" aria-label="Settings sections">
+          <button class="settings-nav-item active" type="button" data-settings-section="personal">Personal Settings</button>
+          <button class="settings-nav-item" type="button" data-settings-section="personality">Personality</button>
+          <button class="settings-nav-item" type="button" data-settings-section="scheduled">Scheduled Jobs</button>
+          <button class="settings-nav-item" type="button" data-settings-section="model">Model</button>
+          <button class="settings-nav-item" type="button" data-settings-section="integrations">
+            <span>Integrations</span>
+            <span class="settings-on-pill">On</span>
+          </button>
+          <button class="settings-nav-item" type="button" data-settings-section="sources">Knowledge Sources</button>
+          <button class="settings-nav-item" type="button" data-settings-section="memory">Memory</button>
+          <button class="settings-nav-item" type="button" data-settings-section="help">Help & Feedback</button>
+        </aside>
+        <section class="settings-page-content">
+          <div id="personalSettingsPanel" class="settings-detail-panel">
+            <h3>Personal Settings</h3>
+            <p>Preferences that shape how EOS works with you.</p>
+            <div class="settings-form-card">
+              <label>Name
+                <span class="name-setting-row">
+                  <input id="userNameInput" type="text" value="Jake">
+                  <button id="saveUserNameButton" class="small-action" type="button">Save</button>
+                </span>
+                <small id="nameSaveStatus" class="settings-save-status"></small>
+              </label>
+              <label>Avatar
+                <button id="avatarSettingsButton" class="avatar-settings-button" type="button">
+                  <span class="avatar settings-avatar-preview" data-user-avatar data-user-initial>J</span>
+                  <span>
+                    <strong>Choose avatar</strong>
+                    <small>Default follows your saved name</small>
+                  </span>
+                </button>
+              </label>
+              <label>Theme
+                <div class="theme-segmented" role="group" aria-label="Theme">
+                  <button class="active" type="button" data-theme="dark">Dark mode</button>
+                  <button type="button" data-theme="light">Light mode</button>
+                </div>
+              </label>
+              <label>Timezone
+                <select id="timezoneSelect">
+                  <option>Auto-detect (America/New_York)</option>
+                  <option>America/New_York</option>
+                  <option>America/Chicago</option>
+                  <option>America/Los_Angeles</option>
+                </select>
+              </label>
+              <label>Location
+                <span class="city-search-control">
+                  <span class="city-search-row">
+                  <input id="citySearchInput" type="search" placeholder="Search for a city" autocomplete="off">
+                  <button id="citySearchButton" class="small-action" type="button">Search</button>
+                  </span>
+                  <span id="citySearchResults" class="city-search-results"></span>
+                </span>
+                <span id="selectedCityLabel" class="selected-city-label">Raleigh, NC</span>
+              </label>
+            </div>
+          </div>
+          <div id="placeholderSettingsPanel" class="settings-detail-panel hidden">
+            <h3 id="placeholderSettingsTitle">Settings</h3>
+            <p>This area is ready for more controls as EOS grows.</p>
+            <div class="settings-form-card settings-placeholder-card"></div>
+          </div>
+          <div id="integrationsSettingsPanel" class="settings-detail-panel hidden">
+            <h3>Integrations</h3>
+            <p>Connectors EOS can use to populate operations, read context, draft responses, and keep work moving.</p>
+            <div class="integration-grid">
+              <article class="integration-card recommended">
+                <div class="integration-card-top">
+                  <span>Priority</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="outlook">Connect</button>
+                </div>
+                <h4>Outlook Email</h4>
+                <p>Read safety emails, summarize threads, detect follow-ups, and draft replies for approval.</p>
+              </article>
+              <article class="integration-card recommended">
+                <div class="integration-card-top">
+                  <span>Priority</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="outlook">Connect</button>
+                </div>
+                <h4>Outlook Calendar</h4>
+                <p>Build the daily dashboard from meetings, inspections, training, deadlines, and follow-ups.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="teams">Connect</button>
+                </div>
+                <h4>Microsoft Teams</h4>
+                <p>Monitor safety channels, project chats, mentions, decisions, and action items.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="slack">Connect</button>
+                </div>
+                <h4>Slack</h4>
+                <p>Track channel updates, direct requests, reminders, and jobsite coordination messages.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="sharepoint">Connect</button>
+                </div>
+                <h4>SharePoint</h4>
+                <p>Use company policies, forms, inspection templates, and safety manuals as references.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="folders">Connect</button>
+                </div>
+                <h4>OneDrive / Local Folders</h4>
+                <p>Watch folders and convert new PDFs, spreadsheets, manuals, and reports into markdown source knowledge.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="google-drive">Connect</button>
+                </div>
+                <h4>Google Drive</h4>
+                <p>Reference shared docs, sheets, slides, checklists, and safety documentation.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Useful</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="google-mail">Connect</button>
+                </div>
+                <h4>Gmail / Google Calendar</h4>
+                <p>Alternative email and calendar source if any work happens outside Outlook.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Future</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="safety-platforms">Connect</button>
+                </div>
+                <h4>Safety Platforms</h4>
+                <p>Connect inspection, incident, training, SDS, subcontractor, and compliance systems when available.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Future</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="project-management">Connect</button>
+                </div>
+                <h4>Project Management</h4>
+                <p>Pull job context from Procore, Autodesk Construction Cloud, Smartsheet, Asana, or similar tools.</p>
+              </article>
+              <article class="integration-card">
+                <div class="integration-card-top">
+                  <span>Exports</span>
+                  <button class="integration-connect-button" type="button" data-connect-provider="exports">Connect</button>
+                </div>
+                <h4>Export Formats</h4>
+                <p>PDF, Excel, Word, PowerPoint, CSV, HTML, JSON, ICS calendar files, ZIP packages, QR sheets, and dashboard snapshots.</p>
+              </article>
+            </div>
+            <div class="settings-form-card integration-steps">
+              <h4>Recommended Build Order</h4>
+              <ol>
+                <li>Connect Outlook Email and Calendar first.</li>
+                <li>Use emails and calendar events to populate the dashboard with today, upcoming, overdue, and waiting-on items.</li>
+                <li>Add Teams next for safety channels, mentions, and project coordination.</li>
+                <li>Add SharePoint or watched folders for company safety documents and templates.</li>
+                <li>Add Slack only if important work requests happen there.</li>
+                <li>Add jobsite-specific safety or project platforms after the daily dashboard is reliable.</li>
+              </ol>
+            </div>
+            <div class="settings-form-card integration-steps">
+              <h4>How To Connect</h4>
+              <ol>
+                <li>Create or install the connector for the system, starting with Outlook Email and Outlook Calendar.</li>
+                <li>Sign in with your work account and approve read access for email/calendar plus draft-only write access for email.</li>
+                <li>Choose what EOS can see: inbox folders, calendars, Teams channels, Slack channels, SharePoint folders, and watched local folders.</li>
+                <li>Run the first sync so EOS can create dashboard items, source-knowledge markdown, tasks, and draft responses.</li>
+                <li>Review the dashboard and adjust filters so EOS focuses on operational work, not noise.</li>
+                <li>Keep approvals on for external actions like sending emails, moving calendar events, submitting reports, or marking safety docs final.</li>
+              </ol>
+            </div>
+          </div>
+          <div id="sourcesSettingsPanel" class="settings-detail-panel hidden">
+            <h3>Knowledge Sources</h3>
+            <p>Approved folders and files EOS can index for source-backed answers.</p>
+            <div class="settings-form-card source-settings-card">
+              <label>Source Label
+                <input id="sourceLabelInput" type="text" placeholder="Safety manual folder">
+              </label>
+              <label>Approved Path
+                <span class="source-path-row">
+                  <input id="sourcePathInput" type="text" placeholder="/Users/jake/Documents/Safety">
+                  <button id="addSourceButton" class="small-action" type="button">Add</button>
+                </span>
+              </label>
+              <div class="source-settings-actions">
+                <button id="indexSourcesButton" class="small-action" type="button">Index sources</button>
+                <small id="sourceSettingsStatus" class="settings-save-status"></small>
+              </div>
+            </div>
+            <div class="source-settings-grid">
+              <div class="settings-form-card source-list-card">
+                <h4>Approved Sources</h4>
+                <div id="approvedSourceList" class="source-list"></div>
+              </div>
+              <div class="settings-form-card source-list-card">
+                <h4>Indexed Documents</h4>
+                <div id="indexedDocumentList" class="source-list"></div>
+              </div>
+            </div>
+          </div>
+          <div id="memorySettingsPanel" class="settings-detail-panel hidden">
+            <h3>Memory</h3>
+            <p>Review and manage the facts EOS keeps for future conversations.</p>
+            <div class="settings-form-card source-settings-card">
+              <label>Memory Type
+                <select id="memoryTypeInput">
+                  <option value="note">Note</option>
+                  <option value="user_preference">Preference</option>
+                  <option value="decision">Decision</option>
+                  <option value="procedure">Procedure</option>
+                  <option value="project">Project</option>
+                </select>
+              </label>
+              <label>Memory
+                <textarea id="memoryContentInput" class="memory-textarea" placeholder="Add something EOS should remember."></textarea>
+              </label>
+              <div class="source-settings-actions">
+                <button id="addMemoryButton" class="small-action" type="button">Add memory</button>
+                <small id="memorySettingsStatus" class="settings-save-status"></small>
+              </div>
+            </div>
+            <div class="settings-form-card source-list-card">
+              <h4>Saved Memories</h4>
+              <div id="memoryList" class="source-list"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="avatarModal" class="modal-backdrop hidden" role="dialog" aria-label="Choose avatar">
+      <div class="avatar-modal">
+        <div class="modal-header">
+          <h3>Choose avatar</h3>
+          <button id="closeAvatarModal" type="button" aria-label="Close avatar picker">×</button>
+        </div>
+        <div class="avatar-option-grid">
+          <button class="avatar-option active" type="button" data-avatar-option="default">
+            <span class="avatar avatar-default" data-avatar-sample>J</span>
+            <strong>Default</strong>
+          </button>
+          <button class="avatar-option" type="button" data-avatar-option="ember">
+            <span class="avatar avatar-ember" data-avatar-sample>J</span>
+            <strong>Ember</strong>
+          </button>
+          <button class="avatar-option" type="button" data-avatar-option="forest">
+            <span class="avatar avatar-forest" data-avatar-sample>J</span>
+            <strong>Forest</strong>
+          </button>
+          <button class="avatar-option" type="button" data-avatar-option="ocean">
+            <span class="avatar avatar-ocean" data-avatar-sample>J</span>
+            <strong>Ocean</strong>
+          </button>
+          <button class="avatar-option" type="button" data-avatar-option="plum">
+            <span class="avatar avatar-plum" data-avatar-sample>J</span>
+            <strong>Plum</strong>
+          </button>
+          <button class="avatar-option" type="button" data-avatar-option="slate">
+            <span class="avatar avatar-slate" data-avatar-sample>J</span>
+            <strong>Slate</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
